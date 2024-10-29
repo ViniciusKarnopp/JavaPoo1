@@ -23,7 +23,7 @@ public abstract class BaseFakeDB<TDominio> {
 
     //1 - metodos abstract nao podem ter codigo
     //2 - metodos abstract devem ser implementados (ou codificados) nas classes filhas (reais)
-    //3 - este método deve ser executado toda a vez que a classe filha for i nstanciada
+    //3 - este método deve ser executado toda a vez que a classe filha for instanciada
     public abstract void preencherDados();
 
     //construtor pro metodo acima preencherdados

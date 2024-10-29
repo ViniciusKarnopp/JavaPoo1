@@ -21,4 +21,5 @@ public abstract class BaseMenu{
     public abstract void Atualizar();
 
     public abstract void Remover();
+
 }

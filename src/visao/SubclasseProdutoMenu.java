@@ -1,18 +1,19 @@
 package visao;
 
+import dominio.SubclasseProduto;
+import servico.SubclasseProdutoServico;
+
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.time.LocalDate;
 
-import servico.ClasseProdutoServico;
-import dominio.ClasseProduto;
+public class SubclasseProdutoMenu extends BaseMenu{
 
-public class ClasseProdutoMenu extends BaseMenu {
+    private SubclasseProdutoServico srv;
 
-    private ClasseProdutoServico srv;
-
-    public ClasseProdutoMenu(){
+    public SubclasseProdutoMenu(){
         super();
-        this.srv = new ClasseProdutoServico();
+        this.srv = new SubclasseProdutoServico(); 
     }
 
     @Override
@@ -22,7 +23,7 @@ public class ClasseProdutoMenu extends BaseMenu {
 
         while (!opcao.equals("9")) {
             Util.LimparConsole();
-            System.out.println("CLASSES DE PRODUTO");
+            System.out.println("SUB CLASSES DE PRODUTO");
             System.out.println("""
                 1 - Listar
                 2 - Localizar
@@ -71,12 +72,11 @@ public class ClasseProdutoMenu extends BaseMenu {
         Util.LimparConsole();
         System.out.println("Listando");  
 
-        ArrayList<ClasseProduto> lista = this.srv.Navegar();
-        for (ClasseProduto produto : lista) {
+        ArrayList<SubclasseProduto> lista = this.srv.Navegar();
+        for (SubclasseProduto produto : lista) {
             this.Imprimir(produto);
         }
         System.out.print("Clique ENTER para continuar. ");
-        this.scanner.nextLine();
         this.scanner.nextLine();
     }
 
@@ -89,7 +89,7 @@ public class ClasseProdutoMenu extends BaseMenu {
         System.out.printf("Informe o codigo da classe do produto: ");
         int cod = this.scanner.nextInt();
 
-        ClasseProduto cp = this.srv.Ler(cod);
+        SubclasseProduto cp = this.srv.Ler(cod);
 
         if (cp != null) {
             this.Imprimir(cp);
@@ -113,14 +113,32 @@ public class ClasseProdutoMenu extends BaseMenu {
         Util.LimparConsole();
         System.out.println("Adicionando");
 
+        int codigo = 0;
+        boolean codigoValido = false;
+
+        while(!codigoValido){
+            try {
+                System.out.printf("Informe o código da classe pai: ");
+                codigo = this.scanner.nextInt();
+                this.scanner.nextLine();
+                codigoValido = true;
+            } catch (InputMismatchException e) {
+                Util.LimparConsole();
+                System.out.println("ERRO! Digite somente números inteiros!");
+                this.scanner.nextLine();
+            }
+        }
+        
+
         System.out.printf("Informe a descrição: ");
         String descricao = this.scanner.next();
 
-        ClasseProduto cp = new ClasseProduto();
+        SubclasseProduto cp = new SubclasseProduto();
+        cp.setCodigoClasse(codigo);
         cp.setDescricao(descricao);
         cp.setDataDeInclusao(LocalDate.now());
 
-        //ClasseProduto cpnovo = this.srv.Adicionar(cp);
+        //SubclasseProduto cpnovo = this.srv.Adicionar(cp);
 
         if(this.srv.Adicionar(cp) != null){
             System.out.println("Classe de Produto adicionada com sucesso!");
@@ -136,7 +154,6 @@ public class ClasseProdutoMenu extends BaseMenu {
 
         System.out.println("Clique ENTER para continuar. ");
         this.scanner.nextLine();
-        this.scanner.nextLine();
     }
 
     @Override
@@ -147,7 +164,7 @@ public class ClasseProdutoMenu extends BaseMenu {
         System.out.printf("Informe o codigo da classe do produto: ");
         int cod = this.scanner.nextInt();
 
-        ClasseProduto cp = this.srv.Ler(cod);
+        SubclasseProduto cp = this.srv.Ler(cod);
 
         if (cp != null) {
             System.out.println("Informe a nova descrição: ");
@@ -187,7 +204,7 @@ public class ClasseProdutoMenu extends BaseMenu {
         System.out.printf("Informe o codigo da classe do produto: ");
         int cod = this.scanner.nextInt();
 
-        ClasseProduto cp = this.srv.Ler(cod);
+        SubclasseProduto cp = this.srv.Ler(cod);
 
         if(cp != null){
             if(this.srv.Deletar(cod) != null){
@@ -208,14 +225,14 @@ public class ClasseProdutoMenu extends BaseMenu {
         this.scanner.nextLine();
     }
     
-    private void Imprimir(ClasseProduto objeto){
+    private void Imprimir(SubclasseProduto objeto){
         String mensagem = "";
-        mensagem += "Codigo do Produto: " + objeto.getCodigo() + " | ";
+        mensagem += "Código da Classe: " + objeto.getCodigoClasse() + " | ";
+        mensagem += "Codigo da Subclasse: " + objeto.getCodigo() + " | ";
         mensagem += "Descricao: " + objeto.getDescricao() + " | ";
         mensagem += "Data de inclusão: " + objeto.getDataDeInclusao() + " | ";
         System.out.println(mensagem);
         System.out.println("=========================================================================================");
         System.out.println();
     }
-
 }
